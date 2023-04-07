@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { useEffect, useState } from 'react';
+import { AddTodoModal } from './components/AddTodoModal';
+
+const baseUrl = 'http://localhost:3030/jsonstore/todos'
 
 function App() {
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    fetch(baseUrl)
+        .then(res => res.json())
+        .then(result => {
+          setTodos(Object.values(result));
+        });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <TodoList todos={todos}/>
+      <AddTodoModal/>
+      
     </div>
+
   );
 }
 
